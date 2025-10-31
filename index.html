@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>web-designing</title>
+    <meta charset="utf-8">
+    <meta name="description" content="web develoment practice">
+    <meta name="keywords" content="HTML, CSS, JavaScript">
+    <meta name="web-dev-lover" content="John Doe">
+    <meta  name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- icon library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<style>
+    *, ::before, ::after {margin: 0; box-sizing: border-box;}
+    html {font: 15px system-ui, sans-serif;}
+    body {
+      background: rgb(41, 33, 33);
+      color: #dee;
+    }
+
+    main {
+        width: 360px;
+        min-height: 400px;
+        background: #dde;
+        box-shadow: 0 0 20px #222;
+        margin: 1rem auto;
+        border-radius: 0 0 4px 4px;
+        padding: 1rem;
+        position: relative;
+    }
+
+    main input {
+        width: 100%;
+        display: block;
+        padding: 8px 8px;
+        border: none;
+        outline: none;
+        background: inherit;
+        border-bottom: 2px solid rgb(80, 82, 60);
+        font-size: 1.1rem;
+    }
+
+    main ul {list-style: none; padding: 0;}
+    main ul li {
+        background: #333;
+        color: #ddd;
+        padding: 8px 16px;
+        border: 1px solid #d6bebe;
+        border-radius: 4px;
+        margin-top: 10px;
+        box-shadow: -2px -3px #222 inset;
+        position: relative;
+        cursor: pointer;
+    }
+
+    li .remove-list {
+        color: rgb(175, 175, 51);
+        position: absolute;
+        right: 10px;
+        top: 5px;
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+    main li.done {text-decoration: line-through; background: #928a8a;}
+
+    main .err-msg {
+        position: absolute;
+        top: -20px;
+        left: 0;
+        font-size: 13px;
+        display: none;
+        animation: err 1s ease-in 3;
+        color: #f2f5e6;
+    }
+
+    @keyframes err {to {color: rgb(252, 0, 0);}}
+
+    @media screen and (max-width: 400px) {
+        main {max-width: 96%; min-height: 350px;}
+    }
+</style>
+
+<body>
+
+
+
+    <h1 style="text-align: center; margin: 1.5rem 0;">To Do App</h1>
+    
+    
+    <main>
+        <span class="err-msg">Please add your list</span>
+        <input type="text" placeholder="Add list" autofocus>
+        <ul id="list">
+
+        </ul>
+    </main>
+
+
+                                                <!-- script -->
+
+                                 
+
+<script>
+
+const todoBox = document.querySelector("main input");
+const list = document.querySelector("main #list");
+const errorMsg = document.querySelector(".err-msg");
+
+
+// load old todos from localStoragen
+window.addEventListener("DOMContentLoaded", loadTodos);
+
+todoBox.addEventListener("keypress", function(e) {
+    if(e.key === "Enter") {
+        addItem(this.value);
+        this.value = "";
+    }
+});
+
+todoBox.addEventListener("input", function() {
+    errorMsg.style.display = "none";
+});
+
+function addItem(text, save = true) {
+    if(!text.trim()) {
+        errorMsg.style.display = "block";
+        return;        
+    }
+    const item = document.createElement("li");
+    item.innerHTML = `${text} <span class="remove-list">&times;</span>`;
+    list.appendChild(item);
+
+    // toggle done class
+    item.addEventListener("click", function(e) {
+        if(e.target.classList.contains("remove-list")) return;
+        this.classList.toggle("done");
+        updateStorage();
+    });
+
+    item.querySelector("span").addEventListener("click", function(e) {
+        e.stopPropagation();
+        item.remove();
+        updateStorage();
+    });
+
+    if(save) updateStorage();
+}
+
+function updateStorage() {
+    const allItems = [];
+    // console.log(allItems);
+    
+    list.querySelectorAll("li").forEach(li => {
+        allItems.push({
+            text: li.childNodes[0].textContent.trim(),
+            done: li.classList.contains("done")
+        });
+    });
+    localStorage.setItem("todos", JSON.stringify(allItems));
+}
+
+function loadTodos(){
+    const saved = JSON.parse(localStorage.getItem("todos")) || [];
+    saved.forEach(todo => addItem(todo.text, false));
+
+    const allList = list.querySelectorAll("li");
+    saved.forEach((todo, i)=> {
+        if(todo.done) allList[i].classList.add("done");
+    })
+}
+
+const a = ["hello", "how are you", "apple"];
+const ab = JSON.stringify(a);
+
+
+
+
+
+
+</script>                                                
+
+</body>
+</html>
+
+
