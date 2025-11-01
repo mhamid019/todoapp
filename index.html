@@ -1,54 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>web-designing</title>
+    <title>To do app</title>
     <meta charset="utf-8">
     <meta name="description" content="web develoment practice">
     <meta name="keywords" content="HTML, CSS, JavaScript">
     <meta name="web-dev-lover" content="John Doe">
     <meta  name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- icon library -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 <style>
     *, ::before, ::after {margin: 0; box-sizing: border-box;}
     html {font: 15px system-ui, sans-serif;}
-    body {
-      background: rgb(41, 33, 33);
-      color: #dee;
-    }
+    body {background: rgb(41, 33, 33); color: #ddd;}
 
-    main {
-        width: 360px;
-        min-height: 400px;
-        background: #dde;
-        box-shadow: 0 0 20px #222;
-        margin: 1rem auto;
-        border-radius: 0 0 4px 4px;
-        padding: 1rem;
+    .container {
+        max-width: 400px;
+        margin: auto;
         position: relative;
     }
 
-    main input {
+    .container input {
         width: 100%;
         display: block;
+        margin: auto;
         padding: 8px 8px;
         border: none;
         outline: none;
         background: inherit;
-        border-bottom: 2px solid rgb(80, 82, 60);
+        border-bottom: 2px solid rgb(131, 134, 103);
         font-size: 1.1rem;
+        position: sticky;
+        caret-color: rgb(212, 212, 122);
+        color: #ddd;
     }
+
+    .container input::placeholder {color: rgb(136, 136, 139);}
+
+    main {
+        box-shadow: 0 0 20px #222;
+        max-height: 300px;
+        margin: 1rem auto;
+        border-radius: 0 0 4px 4px;
+        padding: 1rem 0;
+        position: relative;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    main::-webkit-scrollbar {width: 6px;}
+
+    main::-webkit-scrollbar-thumb {
+        background: #484141;
+        border-radius: 10px;
+        transition: 0.4s;
+    }
+
+    main::-webkit-scrollbar-thumb:hover {background: #776363;}
 
     main ul {list-style: none; padding: 0;}
     main ul li {
-        background: #333;
+        background: #211;
         color: #ddd;
-        padding: 8px 16px;
-        border: 1px solid #d6bebe;
+        padding: 8px 10px;
         border-radius: 4px;
         margin-top: 10px;
-        box-shadow: -2px -3px #222 inset;
         position: relative;
         cursor: pointer;
     }
@@ -60,11 +75,12 @@
         top: 5px;
         font-size: 1.2rem;
         font-weight: bold;
+        user-select: none;
     }
 
-    main li.done {text-decoration: line-through; background: #928a8a;}
+    main li.done {text-decoration: line-through; background: #312e2e; color: rgb(132, 168, 132);}
 
-    main .err-msg {
+    .container .err-msg {
         position: absolute;
         top: -20px;
         left: 0;
@@ -72,12 +88,25 @@
         display: none;
         animation: err 1s ease-in 3;
         color: #f2f5e6;
+        z-index: 9999;
     }
 
-    @keyframes err {to {color: rgb(252, 0, 0);}}
+    @keyframes err {to {color: rgb(252, 0, 0)}}
 
     @media screen and (max-width: 400px) {
         main {max-width: 96%; min-height: 350px;}
+    }
+
+
+    @media screen and (max-width: 468px) {
+
+        main::-webkit-scrollbar {width: 4px;}
+
+        main::-webkit-scrollbar-thumb {
+            background: #484141;
+            border-radius: 10px;
+        }
+        .container input, .container main {width: 92%;}
     }
 </style>
 
@@ -85,16 +114,17 @@
 
 
 
-    <h1 style="text-align: center; margin: 1.5rem 0;">To Do App</h1>
-    
-    
-    <main>
+    <h2 style="text-align: center; margin: 1.5rem 0; color: #d0b2b2;">To Do App</h2>
+ 
+    <div class="container">
+        <input type="text" placeholder="Write and press enter" autofocus>
         <span class="err-msg">Please add your list</span>
-        <input type="text" placeholder="Add list" autofocus>
-        <ul id="list">
+        <main>
+            <ul id="list">
 
-        </ul>
-    </main>
+            </ul>
+        </main>
+    </div>
 
 
                                                 <!-- script -->
@@ -103,10 +133,9 @@
 
 <script>
 
-const todoBox = document.querySelector("main input");
+const todoBox = document.querySelector(".container input");
 const list = document.querySelector("main #list");
 const errorMsg = document.querySelector(".err-msg");
-
 
 // load old todos from localStoragen
 window.addEventListener("DOMContentLoaded", loadTodos);
@@ -167,15 +196,8 @@ function loadTodos(){
     const allList = list.querySelectorAll("li");
     saved.forEach((todo, i)=> {
         if(todo.done) allList[i].classList.add("done");
-    })
+    });
 }
-
-const a = ["hello", "how are you", "apple"];
-const ab = JSON.stringify(a);
-
-
-
-
 
 
 </script>                                                
